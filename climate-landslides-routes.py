@@ -10,7 +10,7 @@ import random
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
-landslide_model = pickle.load(open("climate-landslide.pkl", "rb"))
+landslide_model = pickle.load(open("/git/data/landslides/models/climate-landslide.pkl", "rb"))
 
 app = Flask(__name__)
 
