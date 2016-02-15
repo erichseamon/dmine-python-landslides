@@ -1,0 +1,70 @@
+!DOCTYPE html>
+    <html>
+    <head>
+    
+
+
+  </head>
+    <body>
+
+
+
+<div id="container">
+  <div class="row-fluid">
+    <div class="span10 offset1">
+      <div id="holyMapDiv"></div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span10 offset1">
+      <div class="bradyRules">
+        <div>Lattitude: <span id="latspan"></span></div>
+        <div>Longitude: <span id="lngspan"></span></div>
+        <div>Lat Lng: <span id="latlong"></span></div>
+        <div>Lat Lng on click: 
+        <input type="text" id="latlongclicked"></input></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+function mapa()
+{
+  var opts = {'center': new google.maps.LatLng(39.73757, -104.98472), 'zoom':8, 'mapTypeId': google.maps.MapTypeId.TERRAIN, draggableCursor: 'crosshair'}
+    map = new google.maps.Map(document.getElementById('holyMapDiv'),opts);
+
+  google.maps.event.addListener(map,'click',function(event) {
+    document.getElementById('latlongclicked').value = event.latLng.lat() + ', ' + event.latLng.lng();
+    placeMarker(event.latLng);
+  })
+
+  google.maps.event.addListener(map,'mousemove',function(event) {
+    document.getElementById('latspan').innerHTML = event.latLng.lat();
+    document.getElementById('lngspan').innerHTML = event.latLng.lng();
+    document.getElementById('latlong').innerHTML = event.latLng.lat() + ', ' +     event.latLng.lng();
+  });
+
+  google.maps.event.addListener(marker,'dragend', function(event) {
+    updateMarkerPosition(marker.getPosition());
+  });
+
+}
+
+function placeMarker(location) {
+  if ( marker ) {
+    marker.setPosition(location);
+  } else {
+    marker = new google.maps.Marker({
+      position: location,
+      map: map,
+      animation: google.maps.Animation.DROP,
+      draggable: true
+    });
+  }
+}
+
+window.onload = mapai
+
+</body>
+</html>

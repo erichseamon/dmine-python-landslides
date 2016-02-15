@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <title>NDVI Temporal Average</title>
+    <script type="text/javascript" 
+            src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" 
+            src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style>
+      body, html
+            {width: 100%;height: 100%;}
+            body{margin: 0;}
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      /**
+      * This page will be called from a Python script in App Engine that uses
+      * Jinja templates to pass information from the script to the web page.
+      * Here we get the mapid and token for the map tiles that were generated
+      * by Earth Engine using the Python script ee_appengine.py.
+      */
+
+      var MAPID = "{{ mapid }}";
+      var TOKEN = "{{ token }}";
+
+      /**
+      * The Google Maps API calls getTileUrl when it tries to display a maps
+      * tile.  This is a good place to swap in the mapid and token we got from
+      * the Python script. The other values describe other properties of the
+      * custom map type.
+      */
+      var eeMapOptions = {
+        getTileUrl: function(tile, zoom) {
+          var url = ['https://earthengine.googleapis.com/map',
+                     MAPID, zoom, tile.x, tile.y].join("/");
+          url += '?token=' + TOKEN
+          return url;
+        },
+        tileSize: new google.maps.Size(256, 256)
+      };
+
+      // Create the map type.
+      var mapType = new google.maps.ImageMapType(eeMapOptions);
+
+       // jQuery detects this state of readiness for you. Code included inside $( document ).ready() will only run once the page Document Object Model (DOM) is ready for JavaScript code to execute.       
+      $(document).ready(function () {
+        var city = new google.maps.LatLng(39.5272,-119.8219);
+        var mapOptions = { zoom:8,center: city, mapTypeId: google.maps.MapTypeId.ROADMAP, clickable:true}
+        map = new google.maps.Map($('#map').get(0), mapOptions)
+        map.overlayMapTypes.push(null); // create empty overlay entry
+        map.overlayMapTypes.setAt("0",mapType);
+  
+        var marker = new google.maps.Marker({position:new google.maps.LatLng(39.5272,-119.8219), map: map, draggable: true});
+
+        google.maps.event.addListener(marker, 'dragend', function(a) {
+          var div = document.createElement('div');
+          var longitude=a.latLng.lng().toFixed(4) 
+          var latitude=a.latLng.lat().toFixed(4)     
+          document.getElementById('UserLatLong').value = longitude+','+latitude;
+        });
+      })
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<!--     
+    <div id="toolbar" style="float: left; width: 430px;">
+      <h2><center>Multiply SRTM by 2</center></h2>
+    </div>
+
+    <div style="margin-left; 430px;">
+    </div> -->
+
+
+    <table cellpadding="20px">
+    <!-- LEFT SIDE OF THE PAGE -->
+    <td valign="top" width="30%">
+      <h2>Landslide prediction algorithm calculation for Lat Lon point</h2>
+
+
+      <form action="#" method="post">
+          <div>
+              <p>
+                  <label for="from"></label>
+                  <input id="UserLatLong" name="UserLatLong" value="-119.8219,39.5272" />
+                  <p>
+{{ form.dt(class='datepicker') }}
+    {{ form.hidden_tag() }}
+
+{{ form.dt(class='datepicker') }}
+    {{ form.hidden_tag() }}
+
+    <input type="submit" name="submit" id="submit"/>
+
+
+
+
+
+
+
+
+            <!--        <input type="submit" value="landslide_submit">  -->
+                    
+    </td>
+
+    <!-- RIGHT SIDE OF THE PAGE -->
+    <td valign="top" width="70%">
+      <div id="map" style="width: 1280px; height: 600px;"></div>
+    </td>
+    </table>
+      
+  </body>
+</html>
+            

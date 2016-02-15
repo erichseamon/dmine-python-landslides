@@ -6,14 +6,37 @@
             {{sndmap.js}}
     </head>
     <body>
-        <h1>Flask Google Maps Example</h1>
-    <form action="./plot" method="POST">
-        <input type="text" name="perf_metric" value="disk"> Geology <br><br>
-        <input type="text" name="perf_metric" value="memory"> Gradient <br><br>
-        <input type="text" name="perf_metric" value="cpu"> Soils <br><br>
-        <input type="text" name="perf_metric" value="disk"> Landslide type <br><br>
-        <input type="text" name="perf_metric" value="memory"> Slope Morphology <br><br>
-        <input type="text" name="perf_metric" value="cpu"> Landuse <br><br>
+
+
+
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var mapOptions = {
+                center: new google.maps.LatLng(18.9300, 72.8200),
+                zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var latlngbounds = new google.maps.LatLngBounds();
+            var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+            google.maps.event.addListener(map, 'click', function (e) {
+               alert("Latitude: " + e.latLng.lat() + "\r\nLongitude: " + e.latLng.lng());
+         });
+       }
+    </script>
+    <div id="dvMap" style="width: 500px; height: 500px">
+    </div>
+
+ <h1>Flask Google Maps Example</h1>
+    <form action="./" method="POST">
+        <input type="text" name="projectFilepath" value="disk"> Geology <br><br>
+        <input type="text" name="projectFilepath" value="memory"> Gradient <br><br>
+        <input type="text" name="projectFilepath" value="cpu"> Soils <br><br>
+        <input type="text" name="projectFilepath" value="disk"> Landslide type <br><br>
+        <input type="text" name="projectFilepath" value="memory"> Slope Morphology <br><br>
+        <input type="text" name="projectFilepath" value="cpu"> Landuse <br><br>
         <input type="submit" name="submit_plot" value="Send">
     </form>
 
@@ -36,6 +59,7 @@
         <h2> Second map generated in view</h2>
         <h3> Example for different icons in multiple markers</h3>
         {{sndmap.html}}
+
 
     </body>
 </html>
